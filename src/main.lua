@@ -2,7 +2,7 @@ local game_state = STATE_MAIN_MENU
 local debug = false
 
 function _init()
-    player = new_player(0, 0, 0.5, 2, 7)
+    player = new_player()
     maps = get_maps()
 
     initgamemode()

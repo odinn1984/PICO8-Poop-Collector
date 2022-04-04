@@ -143,5 +143,7 @@ function init_level()
         end
     end
 
+    player.jump_buffer = player.max_jumps
+
     sfx(SFX_START_LEVEL)
 end
