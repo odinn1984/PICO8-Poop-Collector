@@ -21,6 +21,8 @@ function new_player()
         ready = false,
         current_sprite = SPR_PLAYER_IDLE,
         lives = 5,
+        ready_grace_frames = 60,
+        ready_to_move = false,
 
         draw = function(self)
             spr(
@@ -35,7 +37,22 @@ function new_player()
 
         update = function(self)
             if not self.ready then
-                return
+                self.ready_grace_frames -= 1
+
+                if self.ready_grace_frames <= 0 then
+                    self.ready_to_move = true
+
+                    if btnp(BUTTON_LEFT) or 
+                        btnp(BUTTON_RIGHT) or 
+                        btnp(BUTTON_O)
+                    then
+                        self.ready_grace_frames = 60
+                        self.ready = true
+                        self.ready_to_move = false
+                    end
+                end
+
+                return true
             end
 
             if self.is_falling or self.is_jumping then

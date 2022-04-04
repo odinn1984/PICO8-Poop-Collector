@@ -6,7 +6,7 @@ local level_cleared = false
 local sec_for_level = 0
 local sec_remaining = 0
 local frame_time_interval = 1/60
-local ticks = 0
+local ticks = 60
 local maps = {}
 local difficulty = NORMAL_DIFFICULTY
 
@@ -15,10 +15,14 @@ function initgamemode()
     poops_to_collect = 0
     poops_collected = 0
     sec_for_level = 20
-    sec_remaining = sec_for_level
+    sec_remaining = 0
 end
 
 function updategamemode()
+    if not player.ready then
+        return true
+    end
+
     local map = get_current_level()
 
     if poops_collected == poops_to_collect and not level_cleared then
@@ -26,9 +30,6 @@ function updategamemode()
         mset(map.doorcelx, map.doorcely, SPR_OPEN_DOOR)
         level_cleared = true
     end
-
-    sec_remaining -= frame_time_interval
-    ticks += 1
 
     if ticks >= 60 then
         if sec_remaining > 0.3 then
@@ -41,6 +42,9 @@ function updategamemode()
 
         ticks = 0
     end
+
+    sec_remaining -= frame_time_interval
+    ticks += 1
 
     if sec_remaining <= 0 then
         sec_remaining = sec_for_level
@@ -151,6 +155,7 @@ function init_level()
     )
 
     sec_remaining = map.time
+    ticks = 60
 
     for i=map.celx,map.celx+map.w do
         for j=map.cely,map.cely+map.h do
@@ -167,6 +172,9 @@ function init_level()
     end
 
     player.jump_buffer = player.max_jumps
+    player.ready = false
+    player.ready_to_move = false
+    player.ready_grace_frames = 60
 
-    sfx(SFX_START_LEVEL)
+    sfx(SFX_GETTING_READY)
 end
