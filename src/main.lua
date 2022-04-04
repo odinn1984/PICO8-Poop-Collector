@@ -72,6 +72,10 @@ function draw_gameloop()
     player:draw()
     drawgamemode()
 
+    if player.ready_to_move then
+        draw_dialog("move to start")
+    end
+
     if hitbox != nil and #hitbox > 0 and debug then
         rectfill(
             hitbox[1].x,
@@ -155,8 +159,6 @@ function update_gameloop()
         if not start_next_level() then
             sfx(SFX_WIN)
             game_state = STATE_GAME_WIN
-        else
-            sfx(SFX_LEVEL_EXIT)
         end
     end
 end
@@ -168,7 +170,10 @@ function update_pause()
         game_state = STATE_GAME_LOOP
         reload(0x1000, 0x1000, 0x2000)
         init_level()
-        player.lives -= 1
+
+        if get_difficulty == NORMAL_DIFFICULTY then
+            player.lives -= 1
+        end
     end
 end
 

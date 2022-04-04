@@ -33,6 +33,5 @@ and then execute the `run` command and play!
 * C - Start game (or exit to main menu in end game screens)
 
 ## TODO
-* Don't start the level until the player presses a key (with a bit of a delay at first)
 * Add "restart game" option in "game over" and "game win" states
 * Add main menu music
