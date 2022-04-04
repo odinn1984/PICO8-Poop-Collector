@@ -131,7 +131,7 @@ function collect_poop()
 end
 
 function start_next_level()
-    if current_level < number_of_levels then
+    if current_level < number_of_levels and player.lives >= 0 then
         current_level += 1
 
         init_level()
