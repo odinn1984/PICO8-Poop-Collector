@@ -17,6 +17,7 @@ ACT_FALL = "FALL"
 
 -- Directions
 DIRECTION_LEFT = -1
+DIRECTION_NONE = 0
 DIRECTION_RIGHT = 1
 
 -- Sprite Flags

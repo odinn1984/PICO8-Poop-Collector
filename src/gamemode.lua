@@ -77,6 +77,10 @@ function get_current_level()
     return maps[current_level]
 end
 
+function get_level_amount()
+    return number_of_levels
+end
+
 function get_current_level_num()
     return current_level
 end
@@ -142,6 +146,8 @@ function init_level()
             end
         end
     end
+
+    player.jump_buffer = player.max_jumps
 
     sfx(SFX_START_LEVEL)
 end

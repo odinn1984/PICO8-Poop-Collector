@@ -2,7 +2,7 @@ local game_state = STATE_MAIN_MENU
 local debug = false
 
 function _init()
-    player = new_player(0, 0, 0.5, 2, 7)
+    player = new_player()
     maps = get_maps()
 
     initgamemode()
@@ -103,13 +103,15 @@ function draw_gameover()
 end
 
 function update_menu()
+    local current_level_num = get_current_level_num()
+
     if btnp(BUTTON_X) then
         start_next_level()
         game_state = STATE_GAME_LOOP
     elseif btnp(BUTTON_LEFT) then
-        set_current_level_num(get_current_level_num()-1)
+        set_current_level_num((current_level_num-1)%get_level_amount())
     elseif btnp(BUTTON_RIGHT) then
-        set_current_level_num(get_current_level_num()+1)
+        set_current_level_num((current_level_num+1)%get_level_amount())
     end
 end
 
