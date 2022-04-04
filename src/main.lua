@@ -3,9 +3,6 @@ local debug = false
 
 function _init()
     player = new_player()
-    maps = get_maps()
-
-    initgamemode()
 end
 
 function _draw()
@@ -43,17 +40,21 @@ function draw_menu()
     chprint("poop collector", 16, 4)
     spr(SPR_POOP_2, 95, 14)
     chprint("--------------------------------", 22, 4)
-    chprint("press c to start", 55, 8)
 
-    spr(SPR_LEFT, 35, 62)
-    chprint("level "..(get_current_level_num()+1), 63, 8)
-    spr(SPR_RIGHT, 85, 62)
+    chprint("press c to start", 40, 8)
+
+    spr(SPR_LEFT, 35, 53)
+    chprint("level "..(get_current_level_num()+1), 54, 14)
+    spr(SPR_RIGHT, 85, 53)
+
+    spr(SPR_X, 35, 62)
+    chprint(get_difficulty(), 63, 14)
 
     chprint("--------------------------------", 83, 9)
     print("controls", 2, 88, 9)
     spr(SPR_C, 6, 94)
     print("/", 14, 96, 15)
-    spr(SPR_UP, 18, 94)
+    spr(SPR_UP, 17, 94)
     print("jump", 28, 96, 15)
     spr(SPR_LEFT, 6, 102)
     print("move left", 28, 104, 15)
@@ -108,12 +109,19 @@ function update_menu()
     local current_level_num = get_current_level_num()
 
     if btnp(BUTTON_O) then
+        maps = get_maps()
+        initgamemode()
         start_next_level()
         game_state = STATE_GAME_LOOP
     elseif btnp(BUTTON_LEFT) then
+        sfx(SFX_MAIN_MENU_BUTTON)
         set_current_level_num((current_level_num-1)%get_level_amount())
     elseif btnp(BUTTON_RIGHT) then
+        sfx(SFX_MAIN_MENU_BUTTON)
         set_current_level_num((current_level_num+1)%get_level_amount())
+    elseif btnp(BUTTON_X) then
+        sfx(SFX_MAIN_MENU_BUTTON)
+        toggle_difficulty()
     end
 end
 
