@@ -170,7 +170,10 @@ function update_pause()
         game_state = STATE_GAME_LOOP
         reload(0x1000, 0x1000, 0x2000)
         init_level()
-        player.lives -= 1
+
+        if get_difficulty == NORMAL_DIFFICULTY then
+            player.lives -= 1
+        end
     end
 end
 
