@@ -3,6 +3,7 @@ local debug = false
 
 function _init()
     player = new_player()
+    music(MSC_MAIN_MENU)
 end
 
 function _draw()
@@ -113,6 +114,10 @@ function update_menu()
     local current_level_num = get_current_level_num()
 
     if btnp(BUTTON_O) then
+        music(MSC_MAIN_NONE, 500)
+        sfx(SFX_START_GAME)
+        wait(50)
+
         maps = get_maps()
         initgamemode()
         start_next_level()
@@ -140,12 +145,11 @@ function update_gameloop()
 
     if not updategamemode() then
         reload(0x1000, 0x1000, 0x2000)
-        init_level()
-        player.lives -= 1
 
-        if player.lives < 0 then
-            sfx(SFX_GAME_OVER)
-            game_state = STATE_GAME_OVER
+        kill_player()
+
+        if player.lives >= 0 then
+            init_level()
         end
     end
 
@@ -157,7 +161,7 @@ function update_gameloop()
 
     if open_door_colliding(player) then
         if not start_next_level() then
-            sfx(SFX_WIN)
+            music(MSC_GAME_WIN)
             game_state = STATE_GAME_WIN
         end
     end
@@ -169,10 +173,13 @@ function update_pause()
     elseif btnp(BUTTON_O) then
         game_state = STATE_GAME_LOOP
         reload(0x1000, 0x1000, 0x2000)
-        init_level()
 
-        if get_difficulty == NORMAL_DIFFICULTY then
-            player.lives -= 1
+        if get_difficulty() == NORMAL_DIFFICULTY then
+            kill_player()
+        end
+
+        if player.lives >= 0 then
+            init_level()
         end
     end
 end
@@ -183,4 +190,17 @@ end
 
 function update_gameover()
     camera(0, 0)
+end
+
+function kill_player()
+    player.lives -= 1
+
+    if player.lives < 0 then
+        music(MSC_GAME_OVER)
+        game_state = STATE_GAME_OVER
+    end
+end
+
+function wait(t)
+    for i = 1,t do flip() end
 end
