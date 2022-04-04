@@ -34,4 +34,3 @@ and then execute the `run` command and play!
 
 ## TODO
 * Add "restart game" option in "game over" and "game win" states
-* Add main menu music
