@@ -66,7 +66,10 @@ function new_player()
                 moving_direction = DIRECTION_RIGHT
             end
 
-            if btnp(BUTTON_O) and self.jumps_left > 0 and not map_colliding(self, ACT_JUMP) then
+            if (btnp(BUTTON_O) or btnp(BUTTON_UP)) and 
+                self.jumps_left > 0 and 
+                not map_colliding(self, ACT_JUMP) 
+            then
                 sfx(SFX_JUMP)
                 self.dy = -self.max_jump_speed
                 self.jumps_left -= 1
