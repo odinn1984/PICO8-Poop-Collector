@@ -43,7 +43,7 @@ function draw_menu()
     chprint("poop collector", 16, 4)
     spr(SPR_POOP_2, 95, 14)
     chprint("--------------------------------", 22, 4)
-    chprint("press x to start", 55, 8)
+    chprint("press c to start", 55, 8)
 
     spr(SPR_LEFT, 35, 62)
     chprint("level "..(get_current_level_num()+1), 63, 8)
@@ -52,13 +52,15 @@ function draw_menu()
     chprint("--------------------------------", 83, 9)
     print("controls", 2, 88, 9)
     spr(SPR_C, 6, 94)
-    print("jump", 16, 96, 15)
+    print("/", 14, 96, 15)
+    spr(SPR_UP, 18, 94)
+    print("jump", 28, 96, 15)
     spr(SPR_LEFT, 6, 102)
-    print("move left", 16, 104, 15)
+    print("move left", 28, 104, 15)
     spr(SPR_RIGHT, 6, 110)
-    print("move right", 16, 112, 15)
+    print("move right", 28, 112, 15)
     spr(SPR_X, 6, 118)
-    print("reset level", 16, 120, 15)
+    print("reset level", 28, 120, 15)
     chprint("--------------------------------", 125, 9)
 end
 
@@ -105,7 +107,7 @@ end
 function update_menu()
     local current_level_num = get_current_level_num()
 
-    if btnp(BUTTON_X) then
+    if btnp(BUTTON_O) then
         start_next_level()
         game_state = STATE_GAME_LOOP
     elseif btnp(BUTTON_LEFT) then
