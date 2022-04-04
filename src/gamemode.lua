@@ -1,4 +1,4 @@
-local number_of_levels = 0
+local number_of_levels = 32
 local current_level = 0
 local poops_to_collect = 0
 local poops_collected = 0
@@ -8,11 +8,10 @@ local sec_remaining = 0
 local frame_time_interval = 1/60
 local ticks = 0
 local maps = {}
+local difficulty = NORMAL_DIFFICULTY
 
 function initgamemode()
     maps = get_maps()
-    number_of_levels = #maps
-    current_level = 0
     poops_to_collect = 0
     poops_collected = 0
     sec_for_level = 20
@@ -95,6 +94,26 @@ end
 
 function get_poops_count()
     return poops_collected
+end
+
+function get_difficulty()
+    return difficulty
+end
+
+function set_difficulty(dif)
+    if dif != EASY_DIFFICULTY and dif != NORMAL_DIFFICULTY then
+        return false
+    end
+
+    difficulty = dif
+end
+
+function toggle_difficulty()
+    if difficulty == NORMAL_DIFFICULTY then
+        difficulty = EASY_DIFFICULTY
+    else
+        difficulty = NORMAL_DIFFICULTY
+    end
 end
 
 function collect_poop()

@@ -1,4 +1,5 @@
 function create_map_data(level_num, time)
+    local extra_time = get_difficulty() == NORMAL_DIFFICULTY and 0 or 4
     local map = {
         x=0,
         y=0,
@@ -8,7 +9,7 @@ function create_map_data(level_num, time)
         h=16,
         doorcelx=0,
         doorcely=0,
-        time=time,
+        time=time+extra_time,
     }
 
     for i=map.celx,map.celx+map.w do
@@ -35,7 +36,7 @@ function get_maps()
         create_map_data(7, 10),
         create_map_data(8, 9),
         create_map_data(9, 10),
-        create_map_data(10, 8),
+        create_map_data(10, 10),
         create_map_data(11, 11),
         create_map_data(12, 9),
         create_map_data(13, 8),

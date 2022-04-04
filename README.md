@@ -34,8 +34,5 @@ and then execute the `run` command and play!
 
 ## TODO
 * Don't start the level until the player presses a key (with a bit of a delay at first)
-* Remap the "start" key to "c" instead of "x" since it confuses people when using the dialog
 * Add "restart game" option in "game over" and "game win" states
-* Add "easy mode" with more permissive timer
 * Add main menu music
-* Add 1-2 seconds to level 11
