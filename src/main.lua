@@ -171,7 +171,7 @@ function update_pause()
         reload(0x1000, 0x1000, 0x2000)
         init_level()
 
-        if get_difficulty == NORMAL_DIFFICULTY then
+        if get_difficulty() == NORMAL_DIFFICULTY then
             player.lives -= 1
         end
     end
