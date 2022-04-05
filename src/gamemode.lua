@@ -183,6 +183,9 @@ function init_level()
     player.ready_grace_frames = 60
     player.dx = 0
     player.dy = 0
+    player.is_falling = false
+    player.is_jumping = false
+    player.jumps_left = player.max_jumps
     player.current_sprite = SPR_PLAYER_IDLE
 
     sfx(SFX_GETTING_READY)
