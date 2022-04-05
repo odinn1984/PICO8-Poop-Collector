@@ -33,4 +33,6 @@ and then execute the `run` command and play!
 * C - Start game (or exit to main menu in end game screens)
 
 ## TODO
-* Add "restart game" option in "game over" and "game win" states
+* Add "restart game" / "back to menu" option in "game over" and "game win" states
+* Add level number when playing the game
+* Add "Best" and "Latest" runs (level reached and total time)
