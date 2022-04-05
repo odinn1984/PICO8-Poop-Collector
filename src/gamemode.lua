@@ -181,6 +181,9 @@ function init_level()
     player.ready = false
     player.ready_to_move = false
     player.ready_grace_frames = 60
+    player.dx = 0
+    player.dy = 0
+    player.current_sprite = SPR_PLAYER_IDLE
 
     sfx(SFX_GETTING_READY)
 end
