@@ -199,6 +199,9 @@ function kill_player()
         music(MSC_GAME_OVER)
         game_state = STATE_GAME_OVER
     end
+
+    sfx(SFX_DIE)
+    wait(100)
 end
 
 function wait(t)
