@@ -3,8 +3,8 @@ local current_level = 0
 local poops_to_collect = 0
 local poops_collected = 0
 local level_cleared = false
-local sec_for_level = 0
-local sec_remaining = 0
+local sec_for_level = 0.0
+local sec_remaining = 0.0
 local frame_time_interval = 1/60
 local ticks = 60
 local maps = {}
@@ -14,8 +14,8 @@ function initgamemode()
     maps = get_maps()
     poops_to_collect = 0
     poops_collected = 0
-    sec_for_level = 20
-    sec_remaining = 0
+    sec_for_level = 20.0
+    sec_remaining = 0.0
 end
 
 function updategamemode()
@@ -46,7 +46,7 @@ function updategamemode()
     sec_remaining -= frame_time_interval
     ticks += 1
 
-    if sec_remaining <= 0 then
+    if sec_remaining < 0 then
         sec_remaining = sec_for_level
         poops_collected = 0
         return false
@@ -68,7 +68,7 @@ function drawgamemode()
     local clockpos = mapx+(53-(flr(timerlen/2)))
 
     spr(SPR_TIMER, clockpos, mapy)
-    print(sec_remaining, clockpos+10, mapy+2, 7)
+    print(round(sec_remaining, 2), clockpos+10, mapy+2, 7)
 
     local livespos = mapx+119
 
@@ -161,12 +161,18 @@ function init_level()
         for j=map.cely,map.cely+map.h do
             if mget(i, j) == SPR_POOP_1 or mget(i, j) == SPR_POOP_2 then
                 poops_to_collect += 1
-            elseif fget(mget(i, j)) == FLAG_PLAYER_START then
-                mset(i, j, SPR_EMPTY)
-                
+            elseif fget(mget(i, j)) == FLAG_PLAYER_STARTR or
+                fget(mget(i, j)) == FLAG_PLAYER_STARTL
+            then
                 player.x = i*8
                 player.y = j*8
                 player.ready = true
+                player.direction = 
+                    fget(mget(i, j)) == FLAG_PLAYER_STARTR and 
+                        DIRECTION_RIGHT or 
+                        DIRECTION_LEFT
+
+                mset(i, j, SPR_EMPTY)
             end
         end
     end
