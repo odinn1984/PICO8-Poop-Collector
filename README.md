@@ -52,3 +52,10 @@ and then execute the `run` command and play!
 ## TODO
 * Add "Best" and "Latest" runs (level reached and total time)
 * Add "Level Reached" and "Total Time" in "game over" and only "Total Time" in "game win" states
+* Make sure you can't walk over single block gaps (need to fall in them if you don't jump)
+* Balance the levels
+  * Some of the easier levels need to have less time in them
+  * Consider adding some blocks to jump over in the "straight line" levels
+* Add hard mode
+  * 1-3 seconds less in each level with a bottom border of whatever is the current minimum
+  * Less lives (1-2, needs to b tested)
