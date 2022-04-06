@@ -6,6 +6,16 @@ This game is a simple platformer where you need to collect poop in a limited amo
 
 This game has 32 level each one with different amounts of poop to collect and different times to clear them.
 
+This game has 2 difficulties:
+* Easy
+  * Start with 5 lives
+  * Each level has extra 4 seconds
+  * When resetting a level you don't loose a life
+* Normal
+  * Start with 5 lives
+  * No change in base time for levels
+  * When you reset the level you lose 1 life
+
 ## How to run?
 Clone the repository with:
 ```bash
@@ -26,11 +36,17 @@ and then execute the `run` command and play!
 * Left / Right - Navigate
 * C / Up - Jump
 * X - Reset Level
+  * C - Yes
+  * X - No
 
 ### In Main Menu
 * Left / Right - Change starting level
-* Up / Down - Change difficulty
-* C - Start game (or exit to main menu in end game screens)
+* X - Change Difficulty
+* C - Start game
+
+### In End Game Scene (Game Over or Game Finished)
+* X - Back to Main Menu
+* C - Restart game from the level you started at on the difficulty u started the run at
 
 ## TODO
 * Add "Best" and "Latest" runs (level reached and total time)
