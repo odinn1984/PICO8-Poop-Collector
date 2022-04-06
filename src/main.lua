@@ -1,7 +1,25 @@
+app_id = "2a78625b-634a-4f28-ae7a-86d3f1f1712f"
+
 local game_state = STATE_MAIN_MENU
 local debug = false
+local start_from_level = get_current_level_num()
+local start_from_difficulty = get_difficulty_num()
+
+local DGET_START_LEVEL_IDX = 0
+local DGET_START_DIFFICULTY_IDX = 1
 
 function _init()
+    cartdata(app_id)
+
+    start_from_level = dget(DGET_START_LEVEL_IDX) or 0
+    start_from_difficulty = 
+        dget(DGET_START_DIFFICULTY_IDX) == 0 and 
+            NORMAL_DIFFICULTY or 
+            dget(DGET_START_DIFFICULTY_IDX)
+
+    set_current_level_num(start_from_level)
+    set_difficulty(start_from_difficulty)
+
     player = new_player()
     music(MSC_MAIN_MENU)
 end
@@ -99,6 +117,8 @@ function draw_gamewin()
     mprint("poop power achieved", 4)
     spr(SPR_POOP_2, 105, 59)
     chprint("--------------------------------", 71, 4)
+
+    chprint("[c]restart [x]main menu", 120, 8)
 end
 
 function draw_gameover()
@@ -108,6 +128,8 @@ function draw_gameover()
     mprint("you have been flushed", 4)
     spr(SPR_POOP_2, 108, 59)
     chprint("--------------------------------", 71, 4)
+
+    chprint("[c]restart [x]main menu", 120, 8)
 end
 
 function update_menu()
@@ -124,13 +146,19 @@ function update_menu()
         game_state = STATE_GAME_LOOP
     elseif btnp(BUTTON_LEFT) then
         sfx(SFX_MAIN_MENU_BUTTON)
-        set_current_level_num((current_level_num-1)%get_level_amount())
+        start_from_level = (current_level_num-1)%get_level_amount()
+        set_current_level_num(start_from_level)
+        dset(DGET_START_LEVEL_IDX, start_from_level)
     elseif btnp(BUTTON_RIGHT) then
         sfx(SFX_MAIN_MENU_BUTTON)
-        set_current_level_num((current_level_num+1)%get_level_amount())
+        start_from_level = (current_level_num+1)%get_level_amount()
+        set_current_level_num(start_from_level)
+        dset(DGET_START_LEVEL_IDX, start_from_level)
     elseif btnp(BUTTON_X) then
         sfx(SFX_MAIN_MENU_BUTTON)
         toggle_difficulty()
+        start_from_difficulty = get_difficulty_num()
+        dset(DGET_START_DIFFICULTY_IDX, start_from_difficulty)
     end
 end
 
@@ -155,7 +183,7 @@ function update_gameloop()
 
     player:update()
 
-    if pickup_colliding(player) then
+    if (abs(player.dx) > 0 or abs(player.dy) > 0) and pickup_colliding(player) then
         collect_poop()
     end
 
@@ -174,7 +202,7 @@ function update_pause()
         game_state = STATE_GAME_LOOP
         reload(0x1000, 0x1000, 0x2000)
 
-        if get_difficulty() == NORMAL_DIFFICULTY then
+        if get_difficulty_num() == NORMAL_DIFFICULTY then
             kill_player()
         end
 
@@ -186,10 +214,41 @@ end
 
 function update_gamewin()
     camera(0, 0)
+    handle_endgame_input()
 end
 
 function update_gameover()
     camera(0, 0)
+    handle_endgame_input()
+end
+
+function handle_endgame_input()
+    if btnp(BUTTON_X) then
+        game_state = STATE_MAIN_MENU
+
+        music(MSC_MAIN_NONE, 500)
+        restart_game()
+        music(MSC_MAIN_MENU)
+    elseif btnp(BUTTON_O) then
+        game_state = STATE_GAME_LOOP
+
+        music(MSC_MAIN_NONE, 500)
+        restart_game()
+        start_next_level()
+    end
+end
+
+function restart_game()
+    player = new_player()
+    start_from_level = dget(DGET_START_LEVEL_IDX) or 0
+    start_from_difficulty = dget(DGET_START_DIFFICULTY_IDX) or NORMAL_DIFFICULTY
+
+    sfx(SFX_START_GAME)
+    wait(50)
+
+    set_difficulty(start_from_difficulty)
+    set_current_level_num(start_from_level)
+    initgamemode()
 end
 
 function kill_player()

@@ -11,6 +11,8 @@ local maps = {}
 local difficulty = NORMAL_DIFFICULTY
 
 function initgamemode()
+    reload(0x1000, 0x1000, 0x2000)
+
     maps = get_maps()
     poops_to_collect = 0
     poops_collected = 0
@@ -101,11 +103,21 @@ function get_poops_count()
 end
 
 function get_difficulty()
+    if difficulty == EASY_DIFFICULTY then
+        return "easy"
+    elseif difficulty == NORMAL_DIFFICULTY then
+        return "normal"
+    end
+
+    return false
+end
+
+function get_difficulty_num()
     return difficulty
 end
 
 function set_difficulty(dif)
-    if dif != EASY_DIFFICULTY and dif != NORMAL_DIFFICULTY then
+    if dif < 1 or dif > 3 then
         return false
     end
 
@@ -113,11 +125,8 @@ function set_difficulty(dif)
 end
 
 function toggle_difficulty()
-    if difficulty == NORMAL_DIFFICULTY then
-        difficulty = EASY_DIFFICULTY
-    else
-        difficulty = NORMAL_DIFFICULTY
-    end
+    difficulty = 
+        difficulty == EASY_DIFFICULTY and NORMAL_DIFFICULTY or EASY_DIFFICULTY
 end
 
 function collect_poop()
