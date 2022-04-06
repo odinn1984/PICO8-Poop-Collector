@@ -183,7 +183,7 @@ function update_gameloop()
 
     player:update()
 
-    if pickup_colliding(player) then
+    if (abs(player.dx) > 0 or abs(player.dy) > 0) and pickup_colliding(player) then
         collect_poop()
     end
 
