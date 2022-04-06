@@ -1,4 +1,5 @@
-# Poop Collector
+![alt Poop Collector](https://raw.githubusercontent.com/odinn1984/PICO8-Poop-Collector/main/assets/banners/PoopCollectorLogo%202000x400.png?raw=true)
+
 Simple 2D platformer game made with PICO-8, I must admit... This is a SHITTY game :)
 
 ## About
