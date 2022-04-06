@@ -11,6 +11,8 @@ local maps = {}
 local difficulty = NORMAL_DIFFICULTY
 
 function initgamemode()
+    reload(0x1000, 0x1000, 0x2000)
+
     maps = get_maps()
     poops_to_collect = 0
     poops_collected = 0

@@ -99,6 +99,8 @@ function draw_gamewin()
     mprint("poop power achieved", 4)
     spr(SPR_POOP_2, 105, 59)
     chprint("--------------------------------", 71, 4)
+
+    chprint("[c]restart [x]main menu", 120, 8)
 end
 
 function draw_gameover()
@@ -108,6 +110,8 @@ function draw_gameover()
     mprint("you have been flushed", 4)
     spr(SPR_POOP_2, 108, 59)
     chprint("--------------------------------", 71, 4)
+
+    chprint("[c]restart [x]main menu", 120, 8)
 end
 
 function update_menu()
@@ -186,10 +190,38 @@ end
 
 function update_gamewin()
     camera(0, 0)
+    handle_endgame_input()
 end
 
 function update_gameover()
     camera(0, 0)
+    handle_endgame_input()
+end
+
+function handle_endgame_input()
+    if btnp(BUTTON_X) then
+        game_state = STATE_MAIN_MENU
+
+        music(MSC_MAIN_NONE, 500)
+        restart_game()
+        music(MSC_MAIN_MENU)
+    elseif btnp(BUTTON_O) then
+        game_state = STATE_GAME_LOOP
+
+        music(MSC_MAIN_NONE, 500)
+        restart_game()
+        start_next_level()
+    end
+end
+
+function restart_game()
+    player = new_player()
+
+    sfx(SFX_START_GAME)
+    wait(50)
+
+    set_current_level_num(0)
+    initgamemode()
 end
 
 function kill_player()
