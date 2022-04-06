@@ -103,11 +103,21 @@ function get_poops_count()
 end
 
 function get_difficulty()
+    if difficulty == EASY_DIFFICULTY then
+        return "easy"
+    elseif difficulty == NORMAL_DIFFICULTY then
+        return "normal"
+    end
+
+    return false
+end
+
+function get_difficulty_num()
     return difficulty
 end
 
 function set_difficulty(dif)
-    if dif != EASY_DIFFICULTY and dif != NORMAL_DIFFICULTY then
+    if dif < 0 or dif > 1 then
         return false
     end
 
@@ -115,11 +125,7 @@ function set_difficulty(dif)
 end
 
 function toggle_difficulty()
-    if difficulty == NORMAL_DIFFICULTY then
-        difficulty = EASY_DIFFICULTY
-    else
-        difficulty = NORMAL_DIFFICULTY
-    end
+    difficulty = (difficulty+1)%2
 end
 
 function collect_poop()

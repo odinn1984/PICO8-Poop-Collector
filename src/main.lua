@@ -1,9 +1,24 @@
+app_id = "2a78625b-634a-4f28-ae7a-86d3f1f1711f"
+
 local game_state = STATE_MAIN_MENU
 local debug = false
+local start_from_level = get_current_level_num()
+local start_from_difficulty = get_difficulty_num()
+
+local DGET_START_LEVEL_IDX = 0
+local DGET_START_DIFFICULTY_IDX = 1
 
 function _init()
+    cartdata(app_id)
+
     player = new_player()
     music(MSC_MAIN_MENU)
+
+    start_from_level = dget(DGET_START_LEVEL_IDX) or 0
+    start_from_difficulty = dget(DGET_START_DIFFICULTY_IDX) or NORMAL_DIFFICULTY
+
+    set_current_level_num(start_from_level)
+    set_difficulty(start_from_difficulty)
 end
 
 function _draw()
@@ -128,13 +143,19 @@ function update_menu()
         game_state = STATE_GAME_LOOP
     elseif btnp(BUTTON_LEFT) then
         sfx(SFX_MAIN_MENU_BUTTON)
-        set_current_level_num((current_level_num-1)%get_level_amount())
+        start_from_level = (current_level_num-1)%get_level_amount()
+        set_current_level_num(start_from_level)
+        dset(DGET_START_LEVEL_IDX, start_from_level)
     elseif btnp(BUTTON_RIGHT) then
         sfx(SFX_MAIN_MENU_BUTTON)
-        set_current_level_num((current_level_num+1)%get_level_amount())
+        start_from_level = (current_level_num+1)%get_level_amount()
+        set_current_level_num(start_from_level)
+        dset(DGET_START_LEVEL_IDX, start_from_level)
     elseif btnp(BUTTON_X) then
         sfx(SFX_MAIN_MENU_BUTTON)
         toggle_difficulty()
+        start_from_difficulty = get_difficulty_num()
+        dset(DGET_START_DIFFICULTY_IDX, start_from_difficulty)
     end
 end
 
@@ -178,7 +199,7 @@ function update_pause()
         game_state = STATE_GAME_LOOP
         reload(0x1000, 0x1000, 0x2000)
 
-        if get_difficulty() == NORMAL_DIFFICULTY then
+        if get_difficulty_num() == NORMAL_DIFFICULTY then
             kill_player()
         end
 
@@ -216,11 +237,14 @@ end
 
 function restart_game()
     player = new_player()
+    start_from_level = dget(DGET_START_LEVEL_IDX) or 0
+    start_from_difficulty = dget(DGET_START_DIFFICULTY_IDX) or NORMAL_DIFFICULTY
 
     sfx(SFX_START_GAME)
     wait(50)
 
-    set_current_level_num(0)
+    set_difficulty(start_from_difficulty)
+    set_current_level_num(start_from_level)
     initgamemode()
 end
 
