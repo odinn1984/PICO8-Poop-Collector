@@ -1,5 +1,5 @@
 function create_map_data(level_num, time)
-    local extra_time = get_difficulty() == NORMAL_DIFFICULTY and 0 or 4
+    local extra_time = get_difficulty_num() == NORMAL_DIFFICULTY and 0 or 4
     local map = {
         x=0,
         y=0,

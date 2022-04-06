@@ -117,7 +117,7 @@ function get_difficulty_num()
 end
 
 function set_difficulty(dif)
-    if dif < 0 or dif > 1 then
+    if dif < 1 or dif > 3 then
         return false
     end
 
@@ -125,7 +125,8 @@ function set_difficulty(dif)
 end
 
 function toggle_difficulty()
-    difficulty = (difficulty+1)%2
+    difficulty = 
+        difficulty == EASY_DIFFICULTY and NORMAL_DIFFICULTY or EASY_DIFFICULTY
 end
 
 function collect_poop()

@@ -1,4 +1,4 @@
-app_id = "2a78625b-634a-4f28-ae7a-86d3f1f1711f"
+app_id = "2a78625b-634a-4f28-ae7a-86d3f1f1712f"
 
 local game_state = STATE_MAIN_MENU
 local debug = false
@@ -11,14 +11,17 @@ local DGET_START_DIFFICULTY_IDX = 1
 function _init()
     cartdata(app_id)
 
-    player = new_player()
-    music(MSC_MAIN_MENU)
-
     start_from_level = dget(DGET_START_LEVEL_IDX) or 0
-    start_from_difficulty = dget(DGET_START_DIFFICULTY_IDX) or NORMAL_DIFFICULTY
+    start_from_difficulty = 
+        dget(DGET_START_DIFFICULTY_IDX) == 0 and 
+            NORMAL_DIFFICULTY or 
+            dget(DGET_START_DIFFICULTY_IDX)
 
     set_current_level_num(start_from_level)
     set_difficulty(start_from_difficulty)
+
+    player = new_player()
+    music(MSC_MAIN_MENU)
 end
 
 function _draw()
