@@ -30,7 +30,7 @@ function open_door_colliding(obj)
 
     return fget(mget(x/8, y/8)) == FLAG_EXIT or
         fget(mget(x/8, (y+h)/8)) == FLAG_EXIT or
-        fget(mget((x+w)/8, y/8)) == FLAG_EXIT or 
+        fget(mget((x+w)/8, y/8)) == FLAG_EXIT or
         fget(mget((x+w)/8, (y+h)/8)) == FLAG_EXIT
 end
 

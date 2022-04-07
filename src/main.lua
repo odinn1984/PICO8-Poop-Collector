@@ -8,13 +8,18 @@ local start_from_difficulty = get_difficulty_num()
 local DGET_START_LEVEL_IDX = 0
 local DGET_START_DIFFICULTY_IDX = 1
 
+local color_change_start = time()
+local color_change_interval = 0.1
+local colors = {8, 14, 9, 15, 9, 14}
+local current_color_idx = 0
+
 function _init()
     cartdata(app_id)
 
     start_from_level = dget(DGET_START_LEVEL_IDX) or 0
-    start_from_difficulty = 
-        dget(DGET_START_DIFFICULTY_IDX) == 0 and 
-            NORMAL_DIFFICULTY or 
+    start_from_difficulty =
+        dget(DGET_START_DIFFICULTY_IDX) == 0 and
+            NORMAL_DIFFICULTY or
             dget(DGET_START_DIFFICULTY_IDX)
 
     set_current_level_num(start_from_level)
@@ -39,6 +44,11 @@ function _draw()
 end
 
 function _update60()
+    if time() - color_change_start >= color_change_interval then
+        color_change_start = time()
+        current_color_idx = (current_color_idx + 1) % #colors
+    end
+
     if game_state == STATE_MAIN_MENU then
         update_menu()
     elseif game_state == STATE_GAME_LOOP then
@@ -54,34 +64,35 @@ end
 
 function draw_menu()
     cls()
-    chprint("--------------------------------", 10, 4)
-    spr(SPR_POOP_1, 25, 14)
-    chprint("poop collector", 16, 4)
-    spr(SPR_POOP_2, 95, 14)
-    chprint("--------------------------------", 22, 4)
 
-    chprint("press c to start", 40, 8)
+    rectfill(0, 0, 128, 10, 1)
+    rectfill(0, 118, 128, 128, 1)
 
-    spr(SPR_LEFT, 35, 53)
-    chprint("level "..(get_current_level_num()+1), 54, 14)
-    spr(SPR_RIGHT, 85, 53)
+    spr(SPR_BIG_POOP, 10, 23, 2, 2)
+    spr(SPR_GAME_TITLE, 32, 20, 8, 4)
+    spr(SPR_BIG_POOP, 102, 23, 2, 2, true)
 
-    spr(SPR_X, 35, 62)
-    chprint(get_difficulty(), 63, 14)
+    print("press", 33, 78, colors[current_color_idx+1])
+    spr(SPR_C, 55, 76)
+    print("to start", 65, 78, colors[current_color_idx+1])
 
-    chprint("--------------------------------", 83, 9)
-    print("controls", 2, 88, 9)
-    spr(SPR_C, 6, 94)
-    print("/", 14, 96, 15)
-    spr(SPR_UP, 17, 94)
-    print("jump", 28, 96, 15)
-    spr(SPR_LEFT, 6, 102)
-    print("move left", 28, 104, 15)
-    spr(SPR_RIGHT, 6, 110)
-    print("move right", 28, 112, 15)
-    spr(SPR_X, 6, 118)
-    print("reset level", 28, 120, 15)
-    chprint("--------------------------------", 125, 9)
+    spr(SPR_LEFT, 39, 50)
+    chprint("level "..(get_current_level_num()+1), 51, 8)
+    spr(SPR_RIGHT, 80, 50)
+
+    spr(SPR_X, 39, 58)
+    chprint(get_difficulty(), 59, 8)
+
+    local controlsXBase = 2
+    local controlsYBase = 90
+
+    spr(SPR_C, controlsXBase, controlsYBase)
+    print("/", controlsXBase+8, controlsYBase+2, 15)
+    spr(SPR_UP, controlsXBase+11, controlsYBase)
+    spr(SPR_LEFT, controlsXBase+6, controlsYBase+8)
+    spr(SPR_RIGHT, controlsXBase+16, controlsYBase+8)
+    spr(SPR_X, controlsXBase, controlsYBase+17)
+    print("reset", controlsXBase+10, controlsYBase+19, 15)
 end
 
 function draw_gameloop()
@@ -112,24 +123,32 @@ end
 
 function draw_gamewin()
     cls()
-    chprint("--------------------------------", 51, 4)
-    spr(SPR_POOP_1, 15, 59)
-    mprint("poop power achieved", 4)
-    spr(SPR_POOP_2, 105, 59)
-    chprint("--------------------------------", 71, 4)
 
-    chprint("[c]restart [x]main menu", 120, 8)
+    rectfill(0, 0, 128, 10, 1)
+    rectfill(0, 118, 128, 128, 1)
+
+    chprint("you saved the world", 3, 9)
+
+    spr(SPR_BIG_POOP, 6, 52, 2, 2)
+    mprint("poop power achieved", colors[current_color_idx+1])
+    spr(SPR_BIG_POOP, 105, 52, 2, 2, true)
+
+    chprint("[c]restart [x]main menu", 121, 8)
 end
 
 function draw_gameover()
     cls()
-    chprint("--------------------------------", 51, 4)
-    spr(SPR_POOP_1, 12, 59)
-    mprint("you have been flushed", 4)
-    spr(SPR_POOP_2, 108, 59)
-    chprint("--------------------------------", 71, 4)
 
-    chprint("[c]restart [x]main menu", 120, 8)
+    rectfill(0, 0, 128, 10, 1)
+    rectfill(0, 118, 128, 128, 1)
+
+    chprint("you have been flushed", 3, 9)
+
+    spr(SPR_BIG_POOP, 6, 52, 2, 2)
+    mprint("reached level "..get_current_level_num(), 4)
+    spr(SPR_BIG_POOP, 105, 52, 2, 2, true)
+
+    chprint("[c]restart [x]main menu", 121, 8)
 end
 
 function update_menu()
@@ -138,12 +157,17 @@ function update_menu()
     if btnp(BUTTON_O) then
         music(MSC_MAIN_NONE, 500)
         sfx(SFX_START_GAME)
-        wait(50)
+
+        fade_out()
 
         maps = get_maps()
+
         initgamemode()
         start_next_level()
+
         game_state = STATE_GAME_LOOP
+
+        pal()
     elseif btnp(BUTTON_LEFT) then
         sfx(SFX_MAIN_MENU_BUTTON)
         start_from_level = (current_level_num-1)%get_level_amount()
@@ -176,7 +200,7 @@ function update_gameloop()
 
         kill_player()
 
-        if player.lives >= 0 then
+        if player.lives > 0 then
             init_level()
         end
     end
@@ -188,10 +212,14 @@ function update_gameloop()
     end
 
     if open_door_colliding(player) then
+        fade_out()
+
         if not start_next_level() then
             music(MSC_GAME_WIN)
             game_state = STATE_GAME_WIN
         end
+
+        pal()
     end
 end
 
@@ -202,11 +230,11 @@ function update_pause()
         game_state = STATE_GAME_LOOP
         reload(0x1000, 0x1000, 0x2000)
 
-        if get_difficulty_num() == NORMAL_DIFFICULTY then
+        if get_difficulty_num() != EASY_DIFFICULTY then
             kill_player()
         end
 
-        if player.lives >= 0 then
+        if player.lives > 0 then
             init_level()
         end
     end
@@ -244,23 +272,29 @@ function restart_game()
     start_from_difficulty = dget(DGET_START_DIFFICULTY_IDX) or NORMAL_DIFFICULTY
 
     sfx(SFX_START_GAME)
-    wait(50)
+    fade_out()
 
     set_difficulty(start_from_difficulty)
     set_current_level_num(start_from_level)
     initgamemode()
+
+    wait(25)
+    pal()
 end
 
 function kill_player()
     player.lives -= 1
 
-    if player.lives < 0 then
+    if player.lives < 1 then
         music(MSC_GAME_OVER)
         game_state = STATE_GAME_OVER
     end
 
     sfx(SFX_DIE)
-    wait(100)
+    wait(50)
+    fade_out()
+    wait(5)
+    pal()
 end
 
 function wait(t)
