@@ -1,0 +1,23 @@
+{
+    "Lua.diagnostics.globals": [
+        "fget",
+        "mget",
+        "time",
+        "spr",
+        "del",
+        "max",
+        "min",
+        "flr",
+        "flip",
+        "cartdata",
+        "cls",
+        "map",
+        "abs",
+        "btn",
+        "btnp",
+        "_init",
+        "_update60",
+        "_draw",
+        "rectfill"
+    ]
+}
