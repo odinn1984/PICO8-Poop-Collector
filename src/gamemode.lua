@@ -78,7 +78,7 @@ function drawgamemode()
     print(player.lives, livespos-4, mapy+2, 7)
 end
 
-function get_current_level() 
+function get_current_level()
     return maps[current_level]
 end
 
@@ -107,6 +107,8 @@ function get_difficulty()
         return "easy"
     elseif difficulty == NORMAL_DIFFICULTY then
         return "normal"
+    elseif difficulty == HARD_DIFFICULTY then
+        return "hard"
     end
 
     return false
@@ -117,7 +119,7 @@ function get_difficulty_num()
 end
 
 function set_difficulty(dif)
-    if dif < 1 or dif > 3 then
+    if dif < 1 or dif > (NUM_DIFFICULTIES+1) then
         return false
     end
 
@@ -125,8 +127,15 @@ function set_difficulty(dif)
 end
 
 function toggle_difficulty()
-    difficulty = 
-        difficulty == EASY_DIFFICULTY and NORMAL_DIFFICULTY or EASY_DIFFICULTY
+    local new_difficulty = (get_difficulty_num()) % NUM_DIFFICULTIES
+
+    if new_difficulty + 1 == HARD_DIFFICULTY then
+        player.lives = 1
+    else
+        player.lives = 5
+    end
+
+    difficulty = new_difficulty + 1
 end
 
 function collect_poop()
@@ -176,9 +185,9 @@ function init_level()
                 player.x = i*8
                 player.y = j*8
                 player.ready = true
-                player.direction = 
-                    fget(mget(i, j)) == FLAG_PLAYER_STARTR and 
-                        DIRECTION_RIGHT or 
+                player.direction =
+                    fget(mget(i, j)) == FLAG_PLAYER_STARTR and
+                        DIRECTION_RIGHT or
                         DIRECTION_LEFT
 
                 mset(i, j, SPR_EMPTY)
@@ -189,12 +198,12 @@ function init_level()
     player.jump_buffer = player.max_jumps
     player.ready = false
     player.ready_to_move = false
-    player.ready_grace_frames = 60
+    player.ready_to_move_start = time()
     player.dx = 0
     player.dy = 0
     player.is_falling = false
     player.is_jumping = false
-    player.jumps_left = player.max_jumps
+    player.jumps_left =  player.max_jumps
     player.current_sprite = SPR_PLAYER_IDLE
 
     sfx(SFX_GETTING_READY)

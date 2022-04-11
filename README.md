@@ -16,6 +16,10 @@ This game has 2 difficulties:
   * Start with 5 lives
   * No change in base time for levels
   * When you reset the level you lose 1 life
+* Hard
+  * Starts with 1 life
+  * Reduces each level's timer that is over 5 seconds by 2 seconds (or by 1 second if the level starts at 6 seconds)
+  * When you reset the level you lose 1 life
 
 ## How to run?
 Clone the repository with:
@@ -25,10 +29,10 @@ gh repo clone odinn1984/PICO8-Poop-Collector
 
 Open PICO-8 and run the `folder` command to open the folder where the games are stored and copy the repository to that folder.
 
-Navigate to the `poop-collector.p8` file inside PICO-8 and run 
+Navigate to the `poop-collector.p8` file inside PICO-8 and run
 ```bash
 load poop-collector.p8
-``` 
+```
 and then execute the `run` command and play!
 
 ## Controls
@@ -48,14 +52,3 @@ and then execute the `run` command and play!
 ### In End Game Scene (Game Over or Game Finished)
 * X - Back to Main Menu
 * C - Restart game from the level you started at on the difficulty u started the run at
-
-## TODO
-* Add "Best" and "Latest" runs (level reached and total time)
-* Add "Level Reached" and "Total Time" in "game over" and only "Total Time" in "game win" states
-* Make sure you can't walk over single block gaps (need to fall in them if you don't jump)
-* Balance the levels
-  * Some of the easier levels need to have less time in them
-  * Consider adding some blocks to jump over in the "straight line" levels
-* Add hard mode
-  * 1-3 seconds less in each level with a bottom border of whatever is the current minimum
-  * Less lives (1-2, needs to b tested)

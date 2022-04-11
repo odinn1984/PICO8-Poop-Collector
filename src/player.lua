@@ -20,33 +20,32 @@ function new_player()
         is_jumping = false,
         ready = false,
         current_sprite = SPR_PLAYER_IDLE,
-        lives = 5,
-        ready_grace_frames = 60,
+        lives = get_difficulty_num() == HARD_DIFFICULTY and 1 or 5,
+        ready_to_move_duration = 0.1,
+        ready_to_move_start = time(),
         ready_to_move = false,
 
         draw = function(self)
             spr(
-                self.current_sprite, 
-                self.x, 
-                self.y, 
-                self.w/8, 
-                self.h/8, 
+                self.current_sprite,
+                self.x,
+                self.y,
+                self.w/8,
+                self.h/8,
                 self.direction != DIRECTION_RIGHT
             )
         end,
 
         update = function(self)
             if not self.ready then
-                self.ready_grace_frames -= 1
-
-                if self.ready_grace_frames <= 0 then
+                if time() - self.ready_to_move_start > self.ready_to_move_duration then
                     self.ready_to_move = true
 
-                    if btnp(BUTTON_LEFT) or 
-                        btnp(BUTTON_RIGHT) or 
+                    if btnp(BUTTON_LEFT) or
+                        btnp(BUTTON_RIGHT) or
                         btnp(BUTTON_O)
                     then
-                        self.ready_grace_frames = 60
+                        self.ready_to_move_start = time()
                         self.ready = true
                         self.ready_to_move = false
                     end
@@ -68,24 +67,24 @@ function new_player()
             local moving_direction = DIRECTION_NONE
 
             if btn(BUTTON_LEFT) and not map_colliding(self, ACT_MOVE_LEFT) then
-                if not self.is_falling and not self.is_jumping then 
+                if not self.is_falling and not self.is_jumping then
                     self.current_sprite = SPR_PLAYER_IDLE
-                end 
+                end
 
                 self.direction = DIRECTION_LEFT
                 moving_direction = DIRECTION_LEFT
             elseif btn(BUTTON_RIGHT) and not map_colliding(self, ACT_MOVE_RIGHT) then
-                if not self.is_falling and not self.is_jumping then 
+                if not self.is_falling and not self.is_jumping then
                     self.current_sprite = SPR_PLAYER_IDLE
-                end 
+                end
 
                 self.direction = DIRECTION_RIGHT
                 moving_direction = DIRECTION_RIGHT
             end
 
-            if (btnp(BUTTON_O) or btnp(BUTTON_UP)) and 
-                self.jumps_left > 0 and 
-                not map_colliding(self, ACT_JUMP) 
+            if (btnp(BUTTON_O) or btnp(BUTTON_UP)) and
+                self.jumps_left > 0 and
+                not map_colliding(self, ACT_JUMP)
             then
                 sfx(SFX_JUMP)
                 self.dy = -self.max_jump_speed
@@ -144,7 +143,7 @@ function new_player()
 
             if not map_colliding(self, ACT_FALL) then
                 self.dy = appr(
-                    self.dy, 
+                    self.dy,
                     self.max_fall_speed,
                     gravity
                 )
