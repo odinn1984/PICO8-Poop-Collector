@@ -7,7 +7,7 @@ This game is a simple platformer where you need to collect poop in a limited amo
 
 This game has 32 level each one with different amounts of poop to collect and different times to clear them.
 
-This game has 2 difficulties:
+This game has 3 difficulties:
 * Easy
   * Start with 5 lives
   * Each level has extra 4 seconds
